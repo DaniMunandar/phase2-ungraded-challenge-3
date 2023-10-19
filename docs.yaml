@@ -1,0 +1,128 @@
+openapi: "3.0.0"
+info:
+  title: "Inventory API"
+  description: "API for managing inventory items"
+  version: "1.0"
+  contact:
+    name: "Dani Munandar"
+    email: "Danyoey38@gmail.com"
+servers:
+  - url: "http://localhost:8081/inventories"
+    description: "development server"
+
+paths:
+  /inventories:
+    get:
+      summary: Get all inventories
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Inventory'
+        '500':
+          description: Internal server error
+
+    post:
+      summary: Create a new inventory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Inventory'
+      responses:
+        '201':
+          description: Inventory created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+
+  /inventories/{id}:
+    get:
+      summary: Get a specific inventory item by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the inventory item
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Inventory'
+        '404':
+          description: Inventory not found
+        '500':
+          description: Internal server error
+
+    put:
+      summary: Update an existing inventory item by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the inventory item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Inventory'
+      responses:
+        '200':
+          description: Inventory updated successfully
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+
+    delete:
+      summary: Delete an existing inventory item by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the inventory item
+      responses:
+        '200':
+          description: Inventory deleted successfully
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    Inventory:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        item_code:
+          type: string
+        stock:
+          type: integer
+        description:
+          type: string
+        status:
+          type: string
